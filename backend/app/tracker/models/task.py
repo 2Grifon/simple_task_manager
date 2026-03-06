@@ -1,10 +1,17 @@
+from __future__ import annotations
+
 import uuid
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 from sqlmodel import Field, Relationship
 
 from app.core.base_models import UUIDModelBase
 from app.tracker.models.task_statuses import TaskPriority, TaskStatus
+
+if TYPE_CHECKING:
+    from app.tracker.models.project import Project
+    from app.users.models.users import User
+    from app.tracker.models.task_history import TaskStatusHistory
 
 
 class Task(UUIDModelBase, table=True):
@@ -50,17 +57,17 @@ class Task(UUIDModelBase, table=True):
     )
 
     # Relations
-    project: "Project" = Relationship(back_populates="tasks")  # noqa F821
-    author: "User" = Relationship(  # noqa F821
+    project: Project = Relationship(back_populates="tasks")
+    author: User = Relationship(
         back_populates="authored_tasks",
         sa_relationship_kwargs={"foreign_keys": "[Task.author_id]"},
         cascade_delete=True,
     )
-    assignee: Optional["User"] = Relationship(  # noqa F821
+    assignee: Optional[User] = Relationship(
         back_populates="assigned_tasks",
         sa_relationship_kwargs={"foreign_keys": "[Task.assignee_id]"},
     )
-    status_history: list["TaskStatusHistory"] = Relationship(  # noqa F821
+    status_history: list[TaskStatusHistory] = Relationship(
         back_populates="task",
         cascade_delete=True,
     )

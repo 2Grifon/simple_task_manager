@@ -1,10 +1,15 @@
+from __future__ import annotations
+
 import uuid
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 from sqlmodel import Field, Relationship, SQLModel
 
 from app.core.base_models import UUIDModelBase
-from app.tracker.models.task import Task
+
+if TYPE_CHECKING:
+    from app.tracker.models.task import Task
+    from app.users.models.users import User
 
 
 class Project(UUIDModelBase, table=True):
@@ -22,16 +27,16 @@ class Project(UUIDModelBase, table=True):
             ondelete="CASCADE",
         )
     )
-    owner: "User" = Relationship(  # noqa F821
+    owner: User = Relationship(
         back_populates="owned_projects",
         cascade_delete=True,
     )
 
-    members: list["ProjectMember"] = Relationship(
+    members: list[ProjectMember] = Relationship(
         back_populates="projects",
     )
 
-    tasks: list["Task"] = Relationship(  # noqa F821
+    tasks: list[Task] = Relationship(
         back_populates="project",
     )
 
@@ -57,4 +62,4 @@ class ProjectMember(SQLModel, table=True):
     )
 
     project: Project = Relationship(back_populates="members")
-    user: "User" = Relationship(back_populates="project_memberships")  # noqa F821
+    user: User = Relationship(back_populates="project_memberships")
