@@ -1,0 +1,27 @@
+repos:
+  - repo: 'https://github.com/pre-commit/pre-commit-hooks'
+    rev: v6.0.0
+    hooks:
+      # проверяет наличие переноса строки в конце всех текстовых файлов
+      - id: end-of-file-fixer
+        exclude: alembic/versions/.*
+      # предупреждает о добавлении больших файлов в Git
+      - id: check-added-large-files
+      # предупреждает о сохранении файлов с UTF-8 BOM
+      - id: fix-byte-order-marker
+      # предотвращает сохранение приватных ключей
+      - id: detect-private-key
+      # проверяет, что файлы, которые мы собираемся сохранять, как минимум валидный Python
+      - id: check-ast
+
+  - repo: 'https://github.com/psf/black'
+    rev: 26.1.0
+    hooks:
+      - id: black
+        exclude: alembic/versions/.*
+
+  - repo: 'https://github.com/PyCQA/flake8'
+    rev: 7.3.0
+    hooks:
+      - id: flake8
+        exclude: alembic/versions/.*

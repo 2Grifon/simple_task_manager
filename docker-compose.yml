@@ -1,0 +1,82 @@
+services:
+  backend:
+    container_name: simple_task_manager_backend
+    build: backend/
+    restart: always
+    volumes:
+      - ./backend:/backend/
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    networks:
+      - main_network
+
+  postgres:
+    container_name: simple_task_manager_postgres
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=500"
+    image: postgres:15-alpine
+    restart: always
+    volumes:
+      - postgresql-data:/var/lib/postgresql/data
+    # expose:
+    #   - 5432
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    networks:
+      - main_network
+  # rabbitmq:
+  #   restart: always
+  #   container_name: simple_task_manager_rabbitmq
+  #   image: rabbitmq:3.10
+  #   expose:
+  #     - "5672"
+  #     - "15672"
+  #   volumes:
+  #     - rabbitmq-data:/var/lib/rabbitmq
+  #   networks:
+  #     - main_network
+
+  # celery:
+  #   container_name: simple_task_manager_celery
+  #   restart: always
+  #   build: backend/
+  #   volumes:
+  #     - ./backend:/backend:cached
+  #   env_file:
+  #     - .env
+  #   command: celery -A app.core.celery worker --loglevel=info
+  #   depends_on:
+  #     - backend
+  #     - postgres
+  #     - rabbitmq
+  #   networks:
+  #     - main_network
+
+  # celery-beat:
+  #   container_name: simple_task_manager_celery-beat
+  #   restart: always
+  #   build: backend/
+  #   command: celery -A app.core.celery beat --loglevel=info
+  #   env_file: .env
+  #   volumes:
+  #     - ./backend:/backend:cached
+  #   depends_on:
+  #     - backend
+  #     - postgres
+  #     - rabbitmq
+  #   networks:
+  #     - main_network
+
+networks:
+  main_network:
+volumes:
+  postgresql-data:
+  rabbitmq-data:
