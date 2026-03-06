@@ -9,7 +9,8 @@ from alembic import context
 
 from app.core.config import settings
 
-# from app.models import   # NOQA F401
+from app.users.models.users import User  # NOQA F401
+from app.core.base_models import UUIDModelBase, TimestampedModelBase  # NOQA F401
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
