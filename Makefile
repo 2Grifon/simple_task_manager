@@ -1,6 +1,5 @@
 app_name = simple_task_manager
 
-loc_services := postgres backend
 docker_compose := docker compose -f docker-compose.yml
 
 build:
@@ -31,17 +30,11 @@ stop:
 restart:
 	$(docker_compose) restart $(c)
 
-restart-celery:
-	$(docker_compose) restart $(celery_services)
-
 logs:
 	$(docker_compose) logs --tail=1000 -f $(c)
 
 app-logs:
 	$(docker_compose) logs --tail=1000 -f backend $(c)
-
-celery-logs:
-	$(docker_compose) logs --tail=1000 -f celery $(c)
 
 app-bash:
 	docker exec -it $(app_name)_backend bash $(c)

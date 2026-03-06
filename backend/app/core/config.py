@@ -43,28 +43,5 @@ class Settings(BaseSettings):
 
     MEDIA_URL: str = "/media/"
 
-    # RabbitMQ
-    RABBITMQ_PROTOCOL: str = "amqp"
-    RABBITMQ_HOST: str = "rabbitmq"
-    RABBITMQ_PORT: int = 5672
-    RABBITMQ_USER: str = "guest"
-    RABBITMQ_PASSWORD: str = "guest"
-
-    # Celery
-    CELERY_ACCEPT_CONTENT: list[str] = ["json"]
-    CELERY_ENABLE_UTC: bool = False
-    CELERY_TIMEZONE: str = "Europe/Moscow"
-    CELERY_TASK_SERIALIZER: str = "json"
-    CELERY_RESULT_SERIALIZER: str = "json"
-    CELERY_MAX_TASKS_PER_CHILD: int = 1
-    CELERY_RESULT_BACKEND: str = "rpc://"
-
-    @property
-    def CELERY_BROKER_URL(self) -> str:
-        return (
-            f"{self.RABBITMQ_PROTOCOL}://{self.RABBITMQ_USER}:"
-            f"{self.RABBITMQ_PASSWORD}@{self.RABBITMQ_HOST}:{self.RABBITMQ_PORT}"
-        )
-
 
 settings = Settings()

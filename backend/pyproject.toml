@@ -3,7 +3,6 @@ name = "simple_task_manager"
 version = "0.1.0"
 dependencies = [
     "alembic==1.18.1",
-    "celery==5.6.2",
     "fastapi[standard]==0.135.1",
     "psycopg[binary]==3.3.2",
     "pydantic-settings==2.12.0",

@@ -32,51 +32,8 @@ services:
       - .env
     networks:
       - main_network
-  # rabbitmq:
-  #   restart: always
-  #   container_name: simple_task_manager_rabbitmq
-  #   image: rabbitmq:3.10
-  #   expose:
-  #     - "5672"
-  #     - "15672"
-  #   volumes:
-  #     - rabbitmq-data:/var/lib/rabbitmq
-  #   networks:
-  #     - main_network
-
-  # celery:
-  #   container_name: simple_task_manager_celery
-  #   restart: always
-  #   build: backend/
-  #   volumes:
-  #     - ./backend:/backend:cached
-  #   env_file:
-  #     - .env
-  #   command: celery -A app.core.celery worker --loglevel=info
-  #   depends_on:
-  #     - backend
-  #     - postgres
-  #     - rabbitmq
-  #   networks:
-  #     - main_network
-
-  # celery-beat:
-  #   container_name: simple_task_manager_celery-beat
-  #   restart: always
-  #   build: backend/
-  #   command: celery -A app.core.celery beat --loglevel=info
-  #   env_file: .env
-  #   volumes:
-  #     - ./backend:/backend:cached
-  #   depends_on:
-  #     - backend
-  #     - postgres
-  #     - rabbitmq
-  #   networks:
-  #     - main_network
 
 networks:
   main_network:
 volumes:
   postgresql-data:
-  rabbitmq-data:
