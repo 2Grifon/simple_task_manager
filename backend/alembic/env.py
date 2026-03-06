@@ -2,8 +2,14 @@ from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
+from sqlmodel import SQLModel
 
 from alembic import context
+
+
+from app.core.config import settings
+
+# from app.models import   # NOQA F401
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -14,16 +20,19 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# add your model's MetaData object here
-# for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
-target_metadata = None
+
+target_metadata = SQLModel.metadata
+
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
+def get_database_url() -> str:
+    return settings.SQLALCHEMY_DATABASE_URI
+
+
+config.set_main_option("sqlalchemy.url", get_database_url())
 
 
 def run_migrations_offline() -> None:
@@ -38,12 +47,23 @@ def run_migrations_offline() -> None:
     script output.
 
     """
+    naming_convention = {
+        "ix": "ix_%(table_name)s_%(column_0_label)s",  # Added table_name for more uniqueness
+        "uq": "uq_%(table_name)s_%(column_0_name)s",
+        "ck": "ck_%(table_name)s_%(constraint_name)s",  # Used constraint_name for check constraints
+        "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+        "pk": "pk_%(table_name)s",
+    }
+
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        compare_type=True,
+        naming_convention=naming_convention,
+        render_as_batch=True,
     )
 
     with context.begin_transaction():
@@ -57,6 +77,14 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
+    naming_convention = {
+        "ix": "ix_%(table_name)s_%(column_0_label)s",  # Added table_name for more uniqueness
+        "uq": "uq_%(table_name)s_%(column_0_name)s",
+        "ck": "ck_%(table_name)s_%(constraint_name)s",  # Used constraint_name for check constraints
+        "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+        "pk": "pk_%(table_name)s",
+    }
+
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
@@ -64,7 +92,13 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(connection=connection, target_metadata=target_metadata)
+        context.configure(
+            connection=connection,
+            target_metadata=target_metadata,
+            compare_type=True,
+            naming_convention=naming_convention,
+            render_as_batch=True,
+        )
 
         with context.begin_transaction():
             context.run_migrations()
