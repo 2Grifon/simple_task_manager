@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from uuid import UUID, uuid4
+import uuid
 
 from sqlmodel import Field, SQLModel, DateTime
 
@@ -11,7 +11,7 @@ def get_datetime_utc() -> datetime:
 class UUIDModelBase(SQLModel):
     """Базовый класс для моделей с UUID в качестве первичного ключа."""
 
-    id: UUID = Field(default_factory=uuid4, primary_key=True)
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
 
 
 class TimestampedModelBase(SQLModel):
