@@ -9,7 +9,7 @@ from alembic import context
 
 from app.core.config import settings
 
-from app.users.models.users import User  # NOQA F401
+from app.users.models import User  # NOQA F401
 from app.tracker.models import Project, ProjectMember, Task, TaskStatusHistory  # NOQA F401
 from app.core.base_models import UUIDModelBase, TimestampedModelBase  # NOQA F401
 

@@ -7,9 +7,7 @@ from sqlmodel import Field, Relationship
 from app.core.base_models import UUIDModelBase, TimestampedModelBase
 
 if TYPE_CHECKING:
-    from app.tracker.models.project import Project, ProjectMember
-    from app.tracker.models.task import Task
-    from app.tracker.models.task_history import TaskStatusHistory
+    from app.tracker.models import Project, ProjectMember, Task, TaskStatusHistory
 
 
 class User(UUIDModelBase, TimestampedModelBase, table=True):
