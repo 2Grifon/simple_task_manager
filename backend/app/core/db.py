@@ -17,7 +17,7 @@ async_engine = create_async_engine(
     echo=False,
 )
 
-sync_engine = create_engine(
+sync_engine = create_engine(  # TODO убрать?
     settings.SQLALCHEMY_DATABASE_URI,
     echo=False,
 )

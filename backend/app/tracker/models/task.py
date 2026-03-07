@@ -24,7 +24,7 @@ class TaskPriority(str, Enum):
     critical = "critical"
 
 
-# Допустимые переходы статусов — используется в service.py
+# Допустимые переходы статусов для service.py
 ALLOWED_TRANSITIONS: dict[TaskStatus, set[TaskStatus]] = {
     TaskStatus.created: {TaskStatus.in_progress, TaskStatus.cancelled},
     TaskStatus.in_progress: {TaskStatus.review, TaskStatus.created},

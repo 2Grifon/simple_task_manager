@@ -15,7 +15,7 @@ class UUIDModelBase(SQLModel):
 
 
 class TimestampedModelBase(SQLModel):
-    """Базовый класс для моделей с полями created_at и updated_at."""
+    """Базовый класс для моделей с полями created_at."""
 
     created_at: datetime | None = Field(
         default_factory=get_datetime_utc,
